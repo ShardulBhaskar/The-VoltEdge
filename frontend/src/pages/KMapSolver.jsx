@@ -30,14 +30,14 @@ const KMapSolver = () => {
   }, [grid]);
 
   return (
-    <div className="flex flex-col items-center bg-white rounded-2xl shadow-sm border border-slate-200 p-2 min-h-[60vh]">
+    <div className="flex flex-col items-center bg-white rounded-2xl shadow-sm border border-slate-200 p-2 min-h-[60vh] mt-2">
       <div className="flex items-center gap-4 p-4 w-full justify-center">
         <div className="rounded-xl">
            <Grid3x3 className="w-8 h-8 text-blue-600" />
         </div>
         <div>
-           <h1 className="text-3xl font-bold text-slate-900">K-Map Solver</h1>
-           <p className="text-slate-500">Simplify boolean expressions with SOP and POS methods.</p>
+           <h1 className="text-sm md:text-3xl font-bold text-slate-900">K-Map Solver</h1>
+           <p className="text-[12px] md:text-lg text-slate-500">Simplify boolean expressions with SOP and POS methods.</p>
         </div>
       </div>
       
@@ -72,8 +72,8 @@ const KMapSolver = () => {
           <GridBox value={grid[10]} index={10} onClick={() => toggleCell(10)} />
         </div>
         <div className='mt-4 w-1/2 flex justify-center gap-2'>
-          <p className="text-lg font-semibold">Simplified Expression:</p>
-          <p className="text-lg font-semibold text-blue-700">{expression}</p>
+          <p className="text-md md:text-lg font-semibold">Simplified Expression:</p>
+          <p className="text-md md:text-lg font-semibold text-blue-700">{expression}</p>
         </div>
         <div className='flex justify-center flex-col items-center'>
           <div className='text-md text-neutral-500'>How to use?</div>

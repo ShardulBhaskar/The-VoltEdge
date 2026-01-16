@@ -91,25 +91,27 @@ function Home() {
           />
         </div>
 
-        <div className="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="relative grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6">
           {filteredTools.map((tool) => (
             <div 
               key={tool.id}
-              className="group bg-white rounded-xl border border-slate-200 p-6 hover:shadow-lg hover:border-neutral-800 transition-all duration-200 cursor-pointer flex flex-col justify-between min-h-48"
+              className="group bg-white rounded-xl border border-slate-200 p-4 md:p-6 hover:shadow-lg hover:border-neutral-800 transition-all duration-200 cursor-pointer flex flex-col justify-between md:min-h-48"
               onClick={() => navigate(tool.path)}
             >
-              <div>
+              <div className='flex md:flex-col gap-4 items-center'>
                 <div className="flex justify-between items-start mb-4">
                   <div className="bg-slate-50 rounded-lg group-hover:bg-blue-50 transition-colors">
                     {tool.icon}
                   </div>
                 </div>
+                <div className='flex flex-col'>
                 <h3 className="text-md font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
                   {tool.title}
                 </h3>
                 <p className="text-[12px] text-slate-500">
                   {tool.desc}
                 </p>
+                </div>
               </div>
             </div>
           ))}
