@@ -41,14 +41,6 @@ function Home() {
       path: '/converter'
     },
     {
-      id: 'gates',
-      title: 'Logic Gates Minimizer',
-      desc: "Analyze and minimize basic logic gate circuits for efficiency.",
-      icon: <Ampersands className="w-8 h-8 text-red-600" />,
-      tag: 'Circuits',
-      path: '/gates'
-    },
-    {
         id: '1',
         title: 'Resistor Calculator',
         desc: 'Calculate resistance values with precision based on color bands.',
@@ -57,11 +49,20 @@ function Home() {
         path: '/resistor'
     },
     {
+      id: 'gates',
+      title: 'Logic Gates Minimizer',
+      desc: "Analyze and minimize basic logic gate circuits for efficiency.",
+      icon: <Ampersands className="w-8 h-8 text-red-600" />,
+      tag: 'soon',
+      path: '/gates'
+    },
+    
+    {
         id: '2',
         title: 'Logic Gate Simulator',
         desc: 'Interactive simulator to visualize and test your logic gate designs.',
         icon: <Ampersands className="w-8 h-8 text-purple-600" />,
-        tag: 'Simulation',
+        tag: 'soon',
         path: '/gatessimulator',
     }
   ];
@@ -105,10 +106,10 @@ function Home() {
           {filteredTools.map((tool) => (
             <div 
               key={tool.id}
-              className="group bg-white rounded-3xl border border-slate-200 p-6 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:border-slate-900 hover:-translate-y-1 transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden"
+              className={`group bg-white rounded-3xl border border-slate-200 p-6 ${tool.tag!== 'soon' ? 'hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:border-slate-900 hover:-translate-y-1' : ''} transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden`}
               onClick={() => navigate(tool.path)}
             >
-              <div className='flex gap-5 items-center z-10 relative'>
+              <div className={`flex gap-5 items-center z-10 relative ${tool.tag==='soon' ? 'grayscale' : ''}`}>
                 <div className="shrink-0">
                   <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 group-hover:bg-blue-50 transition-colors duration-300">
                     {tool.icon}
@@ -121,6 +122,11 @@ function Home() {
                   <p className="text-sm text-slate-500 leading-relaxed font-medium">
                     {tool.desc}
                   </p>
+                  {tool.tag==='soon' && (
+                    <span className="mt-3 inline-block w-fit px-3 py-1 text-xs font-semibold text-white bg-red-500 rounded-full">
+                      Coming Soon
+                    </span>)
+                  }
                 </div>
               </div>
             </div>
