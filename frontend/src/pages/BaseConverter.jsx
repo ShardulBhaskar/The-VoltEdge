@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
-import { Binary, Trash2 } from 'lucide-react';
-import { convertBase, isValidBinary, isValidDecimal, isValidHex, isValidOctal } from '../components/baseConverter/logic';
+import { Binary, Trash2, Copy } from 'lucide-react';
+import {
+  convertBase,
+  isValidBinary,
+  isValidDecimal,
+  isValidHex,
+  isValidOctal
+} from '../components/baseConverter/logic';
 
 const BaseConverter = () => {
   const [values, setValues] = useState({
@@ -11,6 +17,7 @@ const BaseConverter = () => {
   });
 
   const [error, setError] = useState(null);
+  const [copiedField, setCopiedField] = useState(null);
 
   const handleClear = () => {
     setValues({
@@ -20,18 +27,31 @@ const BaseConverter = () => {
       hex: ''
     });
     setError(null);
+    setCopiedField(null);
+  };
+
+  const handleCopy = async (field) => {
+    if (!values[field]) return;
+
+    try {
+      await navigator.clipboard.writeText(values[field]);
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 1200);
+    } catch (err) {
+      console.error('Copy failed', err);
+    }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     // Clear error on new input
     setError(null);
 
     // If empty, clear all
     if (!value) {
-        handleClear();
-        return;
+      handleClear();
+      return;
     }
 
     // Update the field being typed in immediately
@@ -72,78 +92,96 @@ const BaseConverter = () => {
     // We do NOT overwrite the field currently being typed (name) to verify user input continuity
     // But since the logic is deterministic, re-converting it back *should* be fine unless leading zeros issues.
     // For safety, we only update 'other' fields.
-    const newValues = {
-        decimal: name === 'decimal' ? value : convertBase(decimalVal, 10, 10),
-        binary: name === 'binary' ? value : convertBase(decimalVal, 10, 2),
-        octal: name === 'octal' ? value : convertBase(decimalVal, 10, 8),
-        hex: name === 'hex' ? value : convertBase(decimalVal, 10, 16)
-    };
-
-    setValues(newValues);
+    setValues({
+      decimal: name === 'decimal' ? value : convertBase(decimalVal, 10, 10),
+      binary: name === 'binary' ? value : convertBase(decimalVal, 10, 2),
+      octal: name === 'octal' ? value : convertBase(decimalVal, 10, 8),
+      hex: name === 'hex' ? value : convertBase(decimalVal, 10, 16)
+    });
   };
 
   const inputFields = [
     { id: 'decimal', label: 'Decimal (Base 10)', placeholder: 'e.g. 19' },
     { id: 'binary', label: 'Binary (Base 2)', placeholder: 'e.g. 10011' },
     { id: 'octal', label: 'Octal (Base 8)', placeholder: 'e.g. 23' },
-    { id: 'hex', label: 'Hexadecimal (Base 16)', placeholder: 'e.g. 13' },
+    { id: 'hex', label: 'Hexadecimal (Base 16)', placeholder: 'e.g. 13' }
   ];
 
   return (
     <div className="flex flex-col items-center bg-white rounded-2xl shadow-sm border border-slate-200 p-2 min-h-[60vh] mt-2">
       <div className="flex items-center gap-4 p-4 w-full justify-center">
         <div className="p-3 bg-orange-50 rounded-xl">
-           <Binary className="w-8 h-8 text-orange-600" />
+          <Binary className="w-8 h-8 text-orange-600" />
         </div>
         <div>
-           <h1 className="text-xl md:text-3xl font-bold text-slate-900">Base Converter</h1>
-           <p className="text-sm md:text-lg text-slate-500">Seamlessly translate between Hex, Binary, Decimal, and Octal.</p>
+          <h1 className="text-xl md:text-3xl font-bold text-slate-900">
+            Base Converter
+          </h1>
+          <p className="text-sm md:text-lg text-slate-500">
+            Seamlessly translate between Hex, Binary, Decimal, and Octal.
+          </p>
         </div>
       </div>
-      
+
       <div className="flex flex-col justify-center items-center border-2 border-dashed border-slate-200 rounded-xl p-4 md:p-8 bg-slate-50 w-full max-w-4xl mx-auto">
-        
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
-            {inputFields.map((field) => (
-                <div key={field.id} className="flex flex-col gap-2">
-                    <label 
-                        htmlFor={field.id} 
-                        className="text-sm font-semibold text-slate-700 ml-1"
-                    >
-                        {field.label}
-                    </label>
-                    <div className="relative">
-                        <input
-                            type="text"
-                            id={field.id}
-                            name={field.id}
-                            value={values[field.id]}
-                            onChange={handleChange}
-                            placeholder={field.placeholder}
-                            className="w-full p-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white text-slate-900 font-mono transition-all"
-                            autoComplete="off"
-                        />
-                    </div>
-                </div>
-            ))}
+          {inputFields.map((field) => (
+            <div key={field.id} className="flex flex-col gap-2">
+              <label
+                htmlFor={field.id}
+                className="text-sm font-semibold text-slate-700 ml-1"
+              >
+                {field.label}
+              </label>
+
+              <div className="relative">
+                <input
+                  type="text"
+                  id={field.id}
+                  name={field.id}
+                  value={values[field.id]}
+                  onChange={handleChange}
+                  placeholder={field.placeholder}
+                  className="w-full p-4 pr-12 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white text-slate-900 font-mono transition-all"
+                  autoComplete="off"
+                />
+
+                {/* Copy button */}
+                <button
+                  type="button"
+                  onClick={() => handleCopy(field.id)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-orange-600 transition-colors"
+                  aria-label={`Copy ${field.label}`}
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+
+                {/* Copied tooltip */}
+                {copiedField === field.id && (
+                  <div className="absolute -top-8 right-2 bg-slate-900 text-white text-xs px-2 py-1 rounded-md">
+                    Copied!
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
 
         {error && (
-            <div className="mt-6 p-4 bg-red-50 text-red-600 rounded-xl text-sm font-medium w-full text-center animate-pulse">
-                {error}
-            </div>
+          <div className="mt-6 p-4 bg-red-50 text-red-600 rounded-xl text-sm font-medium w-full text-center animate-pulse">
+            {error}
+          </div>
         )}
 
         <div className="mt-8 flex justify-center">
-            <button 
-                onClick={handleClear}
-                className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 text-slate-600 rounded-full hover:bg-slate-50 hover:border-slate-300 hover:text-red-500 transition-colors font-medium text-sm shadow-sm"
-            >
-                <Trash2 className="w-4 h-4" />
-                Clear All
-            </button>
+          <button
+            onClick={handleClear}
+            className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 text-slate-600 rounded-full hover:bg-slate-50 hover:border-slate-300 hover:text-red-500 transition-colors font-medium text-sm shadow-sm"
+          >
+            <Trash2 className="w-4 h-4" />
+            Clear All
+          </button>
         </div>
-
       </div>
     </div>
   );
