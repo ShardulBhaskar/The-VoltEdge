@@ -54,7 +54,6 @@ function Home() {
       desc: "Analyze and minimize basic logic gate circuits for efficiency.",
       icon: <Ampersands className="w-8 h-8 text-red-600" />,
       tag: 'soon',
-      path: '/gates'
     },
     
     {
@@ -63,7 +62,6 @@ function Home() {
         desc: 'Interactive simulator to visualize and test your logic gate designs.',
         icon: <Ampersands className="w-8 h-8 text-purple-600" />,
         tag: 'soon',
-        path: '/gatessimulator',
     }
   ];
 
