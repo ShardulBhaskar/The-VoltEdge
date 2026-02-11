@@ -10,6 +10,7 @@ import LogicGatesMinimizer from './pages/LogicGatesMinimizer';
 import ResistorColorCodeCalculator from './pages/ResistorColorCode';
 import LogicGateSimulator from './pages/GateSimulator';
 import Blog from './pages/Blog';
+import NumberingAndCodingSystems from './pages/blogs/NumberingAndCodingSystems';
 import About from './pages/About';
 import './App.css';
 
@@ -21,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/numbering-and-coding-systems" element={<NumberingAndCodingSystems />} />
           <Route path="/about" element={<About />} />
           <Route path="/kmap" element={<KMapSolver />} />
           <Route path="/truthtable" element={<TruthTableGenerator />} />
